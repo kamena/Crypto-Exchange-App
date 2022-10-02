@@ -1,0 +1,44 @@
+.table {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .table-body {
+    overflow: auto;
+    min-height: 80px;
+  }
+
+  header {
+    border-bottom: 2px solid #eee;
+
+    .col {
+      cursor: pointer;
+    }
+  }
+
+  header, .row {
+    display: flex;
+  }
+
+  .row{
+    cursor: pointer;
+    transition: background-color .2s ease-in-out;
+
+    &:hover {
+      background-color: #eee;
+    } 
+  }
+  
+  .col {
+    flex: 1;
+    padding: 0.75em 1em;
+
+    &.right {
+      text-align: right;
+    }
+
+    &.center {
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+.search-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 1em;
+
+  label {
+    margin-right: 1em;
+  }
+
+  .search-input {
+    position: relative;
+
+    input {
+      height: 40px;
+      padding: 0 16px 0 40px;
+      border: 2px solid #eee;
+      border-radius: 40px;
+      background: transparent;
+      transition: all .5s ease-in-out;
+      outline: 0;
+    
+      &:hover,
+      &:focus {
+        border-color: #3d5af1;
+      }
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }
+}

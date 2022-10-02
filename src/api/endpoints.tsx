@@ -1,11 +1,4 @@
-import axios from 'axios'
-
-const baseUrls = {
-  binance: 'https://api.binance.com/api/v3/',
-  kraken: 'https://api.kraken.com/0/public/',
-  huobi: 'https://api.huobi.pro/market/',
-  bitfinex: 'https://api-pub.bitfinex.com/v2/'
-}
+import { binanceClient, bitfinexClient, huobiClient, krakenClient } from './api'
 
 enum Platforms {
   Binance = 'Binance',
@@ -15,7 +8,7 @@ enum Platforms {
 }
 
 const getBinanceAvgPrice = (symbol: string) => {
-  return axios.get(`${baseUrls.binance}avgPrice`, {
+  return binanceClient.get('avgPrice', {
     params: { symbol: symbol.toUpperCase() }
   })
   .then((res) => ({
@@ -31,7 +24,7 @@ const getBinanceAvgPrice = (symbol: string) => {
 }
 
 const getBitfinexSymbolPrice = (symbol: string) => {
-  return axios.get(`${baseUrls.bitfinex}ticker/t${symbol.toUpperCase()}`)
+  return bitfinexClient.get(`ticker/t${symbol.toUpperCase()}`)
     .then((res) => ({
       platform: Platforms.Bitfinex,
       price: res.data[9],
@@ -45,7 +38,7 @@ const getBitfinexSymbolPrice = (symbol: string) => {
 }
 
 const getKrakenAvgPrice = (symbol: string) => {
-  return axios.get(`${baseUrls.kraken}Ticker`, {
+  return krakenClient.get('Ticker', {
     params: { pair: symbol }
   })
   .then((res) => Object.values(res.data.result).map(data => ({
@@ -61,7 +54,7 @@ const getKrakenAvgPrice = (symbol: string) => {
 }
 
 const getHuobiSymbolPrice = (symbol: string) => {
-  return axios.get(`${baseUrls.huobi}detail/merged`, {
+  return huobiClient.get('detail/merged', {
     params: { symbol: symbol.toLowerCase() }
   })
   .then((res) => {
@@ -106,7 +99,7 @@ export interface ISymbolHistory {
 }
 
 const getBinanceSymbolHistory = (symbol: string): Promise<ISymbolHistory[]> => {
-  return axios.get(`${baseUrls.binance}trades`, {
+  return binanceClient.get('trades', {
     params: {
       symbol: symbol.toUpperCase(),
       limit: 10
@@ -115,18 +108,9 @@ const getBinanceSymbolHistory = (symbol: string): Promise<ISymbolHistory[]> => {
 }
 
 const getKrakenSymbolHistory = (symbol: string): Promise<ISymbolHistory[]> => {
-  return axios.get(`${baseUrls.kraken}Trades`, {
+  return krakenClient.get('Trades', {
     params: {
       pair: symbol.toUpperCase()
-    },
-    headers: {
-      Accept: 'application/json',
-      'X-Requested-With': 'XMLHttpRequest',
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
-      'Access-Control-Allow-Credentials': 'true',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
     }
   })
   .then((res) => Object.values(res.data.result).map(data => ({
@@ -138,7 +122,7 @@ const getKrakenSymbolHistory = (symbol: string): Promise<ISymbolHistory[]> => {
 }
 
 const getBitfinexSymbolHistory = (symbol: string) => {
-  return axios.get(`${baseUrls.bitfinex}trades/t${symbol.toUpperCase()}/hist`).then((res) => res.data)
+  return bitfinexClient.get(`trades/t${symbol.toUpperCase()}/hist`).then((res) => res.data)
 }
 
 
@@ -158,7 +142,7 @@ interface IHuobiHistory {
 }
 
 const getHuobiSymbolHistory = (symbol: string) => {
-  return axios.get(`${baseUrls.huobi}history/trade`, {
+  return huobiClient.get('history/trade', {
     params: {
       symbol: symbol.toLowerCase(),
       size: 10

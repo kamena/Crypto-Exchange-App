@@ -30,7 +30,7 @@ const PairPriceTable: React.FC<PairPriceTableProps> = ({data, loading}) => {
   const { symbol } = useParams()
   const location = useLocation()
 
-  const handleRowClick = useCallback(async (item: PairPriceType) => {
+  const handleRowClick = async (item: PairPriceType) => {
     setIsOpen(true)
     setLoadingHistory(true)
     errorHistory && setErrorHistory(false)
@@ -38,13 +38,13 @@ const PairPriceTable: React.FC<PairPriceTableProps> = ({data, loading}) => {
       .then((res) => setOpenedItem(res))
       .catch(() => setErrorHistory(true))
       .finally(() => setLoadingHistory(false))
-  }, [errorHistory])
+  }
 
   useEffect(() => {
     if (location.pathname.includes('/details') && symbol) {
-      handleRowClick({symbol})
+      handleRowClick({symbol, platform: data[0]?.platform})
     }
-  }, [location.pathname, symbol, handleRowClick])
+  }, [location.pathname, symbol])
   
   const columns = [
     {
